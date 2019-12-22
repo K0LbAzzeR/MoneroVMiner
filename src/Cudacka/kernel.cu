@@ -180,7 +180,7 @@ __device__ __forceinline__  bool Read2bCounter(u32 * ecounters, const int bucket
 
 
 extern "C" {
-	__constant__ u64 recovery[42];
+	__constant__ u64 recovery[32];
 
 	__global__  void FluffySeed4K(const u64 v0i, const u64 v1i, const u64 v2i, const u64 v3i, uint4 * __restrict__ buffer, int * __restrict__ indexes, const int offset)
 	{
@@ -1446,7 +1446,7 @@ extern "C" {
 		const int gid = blockDim.x * blockIdx.x + threadIdx.x;
 		const int lid = threadIdx.x;
 
-		__shared__ u32 nonces[42];
+		__shared__ u32 nonces[32];
 		u64 sipblock[64];
 
 		uint64_t v0;
@@ -1454,7 +1454,7 @@ extern "C" {
 		uint64_t v2;
 		uint64_t v3;
 
-		if (lid < 42) nonces[lid] = 0;
+		if (lid < 32) nonces[lid] = 0;
 
 		__syncthreads();
 
@@ -1491,7 +1491,7 @@ extern "C" {
 				u64 a = u | (v << 32);
 				u64 b = v | (u << 32);
 
-				for (int i = 0; i < 42; i++)
+				for (int i = 0; i < 32; i++)
 				{
 					if ((recovery[i] == a) || (recovery[i] == b))
 						nonces[i] = blockNonce + s;
@@ -1501,7 +1501,7 @@ extern "C" {
 
 		__syncthreads();
 
-		if (lid < 42)
+		if (lid < 32)
 		{
 			if (nonces[lid] > 0)
 				indexes[lid] = nonces[lid];

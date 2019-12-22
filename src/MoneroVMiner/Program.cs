@@ -22,7 +22,7 @@ namespace GrinGoldMiner3
         {
             Console.OutputEncoding = System.Text.Encoding.UTF8;
 
-            Console.WriteLine("Starting GrinGoldMiner 3.0 ...");
+            Console.WriteLine("Starting MoneroV Miner ...");
 
             Console.CancelKeyPress += delegate
             {
@@ -42,11 +42,11 @@ namespace GrinGoldMiner3
             {
                 if (IsLinux)
                 {
-                    Console.WriteLine(@"ERROR PARSING ARGUMENTS. WILL CLOSE. Use args like this: ./GrinGoldMinerCLI configpath=/absolute/path/to/directory api-port=5777");
+                    Console.WriteLine(@"ERROR PARSING ARGUMENTS. WILL CLOSE. Use args like this: ./MoneroVMiner configpath=/absolute/path/to/directory api-port=5777");
                 }
                 else
                 {
-                    Console.WriteLine(@"ERROR PARSING ARGUMENTS. WILL CLOSE. Use args like this: GrinGoldMinerCLI.exe configpath=C:\absolute\path\to\directory api-port=5777");
+                    Console.WriteLine(@"ERROR PARSING ARGUMENTS. WILL CLOSE. Use args like this: MoneroVMiner.exe configpath=C:\absolute\path\to\directory api-port=5777");
                 }
                 
                 Console.ReadLine();
@@ -104,7 +104,7 @@ namespace GrinGoldMiner3
         private static void GetConfig()
         {
             var dir = Path.GetDirectoryName(System.Reflection.Assembly.GetExecutingAssembly().Location);
-            configPath = Path.Combine(Directory.GetParent(dir).FullName, "config.xml");
+            configPath = "./config.xml";
 
             config = new Config();
             if (File.Exists(configPath))
@@ -189,7 +189,7 @@ namespace GrinGoldMiner3
                 string pool = "";
                 string port = "13416";
 
-                Console.WriteLine($"Enter your mining pool stratum address:");
+                Console.WriteLine($"Enter your mining pool stratum address (IP:PORT) :");
                 pool = Console.ReadLine();
 
                 generated_config.PrimaryConnection.ConnectionAddress = pool;
@@ -206,7 +206,7 @@ namespace GrinGoldMiner3
                 }
                 else
                 {
-                    Console.WriteLine($"Enter your mining pool stratum port:");
+                    Console.WriteLine($"Enter your mining pool stratum port (IP:PORT) :");
                     port = Console.ReadLine();
                 }
 
@@ -218,12 +218,10 @@ namespace GrinGoldMiner3
                 {
                     Console.WriteLine($"Unable to parse port, please edit the config manually.");
                 }
-                Console.WriteLine($"Use TLS? (y/n)         [Note that the pool:port must support TLS]");
-                string ssl = Console.ReadLine();
-                generated_config.PrimaryConnection.Ssl = ssl == "y" || ssl == "Y" || ssl == "YES" || ssl == "yes" || ssl == "是";
-                Console.WriteLine($"Enter your email (pool login):");
+                generated_config.PrimaryConnection.Ssl = false;
+                Console.WriteLine($"Enter your MoneroV Wallet-Address:");
                 generated_config.PrimaryConnection.Login = Console.ReadLine();
-                Console.WriteLine($"Enter your pool password:");
+                Console.WriteLine($"Enter your Rig Name:");
                 generated_config.PrimaryConnection.Password = Console.ReadLine();
 
 

@@ -106,8 +106,7 @@ namespace Mozkomor.GrinGoldMiner
             password = _pwd;
             UseSsl = _ssl;
 
-            if (algo == "swap")
-                type = CuckooType.SWAP;
+            type = CuckooType.SWAP;
 
             IsConnected = false;
         }

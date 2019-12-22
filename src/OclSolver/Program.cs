@@ -306,7 +306,7 @@ namespace OclSolver
                                             bufferI1 = context.CreateBuffer<uint>(MemoryFlag.ReadWrite, INDEX_SIZE);
                                             bufferI2 = context.CreateBuffer<uint>(MemoryFlag.ReadWrite, INDEX_SIZE);
                                             bufferA2 = context.CreateBuffer<uint>(MemoryFlag.ReadWrite, 4096 * 4096 * 4);
-                                            bufferR = context.CreateBuffer<uint>(MemoryFlag.ReadOnly, 42 * 2);
+                                            bufferR = context.CreateBuffer<uint>(MemoryFlag.ReadOnly, 32 * 2);
                                         }
                                         catch (Exception ex)
                                         {
@@ -484,7 +484,7 @@ namespace OclSolver
                                                         s.nonces = commandQueue.EnqueueReadBuffer<uint>(bufferI2, s.job.GetProofSize());
                                                         OpenCl.DotNetCore.Interop.CommandQueues.CommandQueuesNativeApi.Finish(commandQueue.Handle);
                                                         s.nonces = s.nonces.OrderBy(n => n).ToArray();
-                                                        //fidelity = (42-cycles_found / graphs_searched) * 42
+                                                        //fidelity = (32-cycles_found / graphs_searched) * 32
                                                         solutions++;
                                                         s.fidelity = ((double)solutions / (double)trims) * s.job.GetProofSize();
                                                         //Console.WriteLine(s.fidelity.ToString("0.000"));

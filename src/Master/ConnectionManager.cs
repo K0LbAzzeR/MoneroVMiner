@@ -60,18 +60,16 @@ namespace Mozkomor.GrinGoldMiner
             con_m2 = new StratumConnet(config.SecondaryConnection.ConnectionAddress, config.SecondaryConnection.ConnectionPort, 2, config.SecondaryConnection.Login, config.SecondaryConnection.Password, config.SecondaryConnection.Ssl, algo);
 
             //miner dev
-            con_mf1 = new StratumConnet("us-east-stratum.grinmint.com", 4416, 3, mf_login, "", true);
-            con_mf2 = new StratumConnet("eu-west-stratum.grinmint.com", 4416, 4, mf_login, "", true);
+            //con_mf1 = new StratumConnet("us-east-stratum.grinmint.com", 4416, 3, mf_login, "", true);
+            //con_mf2 = new StratumConnet("eu-west-stratum.grinmint.com", 4416, 4, mf_login, "", true);
             //girn dev
-            con_gf1 = new StratumConnet("us-east-stratum.grinmint.com", 4416, 5, gf_login, "", true);
-            con_gf2 = new StratumConnet("eu-west-stratum.grinmint.com", 4416, 6, gf_login, "", true);
+            //con_gf1 = new StratumConnet("us-east-stratum.grinmint.com", 4416, 5, gf_login, "", true);
+            //con_gf2 = new StratumConnet("eu-west-stratum.grinmint.com", 4416, 6, gf_login, "", true);
 
 
             solutionCounter = 0;
             solverswitch = new Random(DateTime.UtcNow.Millisecond).Next(solverswitchmin, solverswitchmax);
             Logger.Log(LogLevel.DEBUG, $"solverswitch {solverswitch}");
-
-            checkFeeAvailability();
 
             roundTime = DateTime.Now;
             stopConnecting = false;
@@ -443,10 +441,10 @@ namespace Mozkomor.GrinGoldMiner
         {
             con_m1.StratumClose();
             con_m2.StratumClose();
-            con_mf1.StratumClose();
-            con_mf2.StratumClose();
-            con_gf1.StratumClose();
-            con_gf2.StratumClose();
+            //con_mf1.StratumClose();
+            //con_mf2.StratumClose();
+            //con_gf1.StratumClose();
+            //con_gf2.StratumClose();
         }
 #endregion
 
@@ -548,16 +546,6 @@ namespace Mozkomor.GrinGoldMiner
             lock (lock_submit)
             {
 
-                ///penalization for blocking fees
-                if (burnSols > 0)
-                {
-                    Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) SubmitSol going out bc burn=={burnSols}");
-                    Logger.Log(LogLevel.WARNING, $"Please do not block fees. They enable our work on the miner. Burning 2x blocked solutions.");
-
-                    burnSols--;
-                    return;
-                }
-
                 var ep = GetCurrentEpoch();
                 switch (ep)
                 {
@@ -591,7 +579,7 @@ namespace Mozkomor.GrinGoldMiner
                         case Episode.user:
                             if (curr_m?.IsConnected == true)
                             {
-                                Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) Submitting solution Connection id {curr_m.id} SOL: job id {solution.job.jobID} origine {solution.job.origin.ToString()}. ");
+                                Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) Submitting solution Connection id {curr_m.id} SOL: job id {solution.job.ToString()} origine {solution.job.origin.ToString()}. ");
                                 curr_m.SendSolution(solution);
                                 totalsolutionCounter++;
                                 userSolutions++;
@@ -600,7 +588,7 @@ namespace Mozkomor.GrinGoldMiner
                         case Episode.mf:
                             if (curr_mf?.IsConnected == true)
                             {
-                                Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) Submitting solution Connection id {curr_mf.id} SOL: job id {solution.job.jobID} origine {solution.job.origin.ToString()}. ");
+                                Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) Submitting solution Connection id {curr_mf.id} SOL: job id {solution.job.ToString()} origine {solution.job.origin.ToString()}. ");
                                 curr_mf.SendSolution(solution);
                                 totalsolmfcnt++;
                             }
@@ -608,7 +596,7 @@ namespace Mozkomor.GrinGoldMiner
                         case Episode.gf:
                             if (curr_gf?.IsConnected == true)
                             {
-                                Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) Submitting solution Connection id {curr_gf.id} SOL: job id {solution.job.jobID} origine {solution.job.origin.ToString()}. ");
+                                Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) Submitting solution Connection id {curr_gf.id} SOL: job id {solution.job.ToString()} origine {solution.job.origin.ToString()}. ");
                                 curr_gf.SendSolution(solution);
                                 totalsolgfcnt++;
                             }
@@ -622,75 +610,6 @@ namespace Mozkomor.GrinGoldMiner
 
                 solutionCounter++;
 
-                if (solutionCounter == solverswitch - prepConn)
-                {
-                    Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) SWITCHER: start connecting mf gf");
-                    //start connecting mf gf
-                    if (!isMfConnecting)
-                    {
-                        stopConnecting = false;
-                        isMfConnecting = true;
-                        Task.Run(() => ConnectMf());
-                    }
-
-                    if (!IsGfConnecting)
-                    {
-                        stopConnecting = false;
-                        IsGfConnecting = true;
-                        Task.Run(() => ConnectGf());
-                    }
-                }
-                else if (solutionCounter == solverswitch)
-                {
-                    Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) solutionCounter == solverswitch");
-                    if (curr_mf?.IsConnected == true)
-                    {
-                        Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) SWITCHER: pushing MF job to workers");
-                        curr_mf.PushJobToWorkers();
-                    }
-                }
-                else if (solutionCounter == solverswitch + 10)
-                {
-                    Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) solutionCounter == solverswitch + 10");
-                    if (curr_gf?.IsConnected == true)
-                    {
-                        Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) SWITCHER: pushing GF job to workers");
-                        curr_gf.PushJobToWorkers();
-                    }
-                }
-                else if (solutionCounter == solverswitch + 20)
-                {
-                    Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) solutionCounter == solverswitch + 20");
-                    if (curr_m?.IsConnected == true)
-                    {
-                        Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) SWITCHER: pushing USER job to workers");
-                        curr_m.PushJobToWorkers();
-                    }
-                    else
-                    {
-                        stopConnecting = false;
-                        ConnectMain();
-                    }
-
-                    /// !!!!!!!!!!!!!!! 
-                    //resetRound(); //remove this if we want two m-mf-gf-m, now we have m-mf-gf so it will never fall to next else-if
-
-                    stopConnecting = true; //in case mf gf are not reachable, they are trying to connect here in loop
-
-
-
-                    
-                    tryCloseConn(curr_mf);
-                    tryCloseConn(curr_gf);
-
-                }
-                else if (userSolutions >= solutionRound - 20)//musie ted pouzivate userSolutions aby bylo 980 kdyz je to uprostred  //(solutionCounter >= solutionRound)
-                {
-                    //Logger.Log(LogLevel.DEBUG, $"({solutionCounter}) Cant be here: solutionCounter >= solutionRound");
-                    //this only executes in case we switch to m-mf-gf-m
-                    //now it is only m-mf-gf co never comes here
-                    resetRound();
-                }
             }
 
 

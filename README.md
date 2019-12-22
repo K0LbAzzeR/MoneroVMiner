@@ -1,11 +1,6 @@
-# [DISCONTINUED]
-# GGM - open-source Grin GPU miner
+# open-source Cuckarood29V GPU miner
 
-**Update: GGM will not be updated for 2020 hard-fork and PoW change!**
-
-Miner supports all AMD and NVIDIA 6GB+ cards for both Linux and Winows (MacOS untested). Up to 60% faster compared to GGM2.
-
-GGM releases collect 1% fee for the Grin Development Fund and 1% fee for further miner development.
+Miner supports all AMD and NVIDIA 6GB+ cards for both Linux and Winows.
 
 ## How to build
 
@@ -13,10 +8,9 @@ Miner is written entirely in C# using new open-source .NET implementation called
 
 Instal dotnet core 2.2 SDK (Linux/Windows/Mac) from https://dotnet.microsoft.com/download
 
-Clone the repository and go to _build forder.
+Clone the repository and go to _build folder.
 
-Run `build_win.bat` (Windows) or `build_linux.sh` (Linux). Alternatively, run `build_[OS]_API.bat` to build a miner with remote API support.
-API version can be used with our dashboard project to manage multiple rigs.
+Run `build_win.bat` (Windows) or `build_linux.sh` (Linux).
 
 Run `run_miner_win.bat` or `run_miner_linux.sh` to start the miner.
 

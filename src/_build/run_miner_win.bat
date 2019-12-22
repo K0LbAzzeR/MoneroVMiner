@@ -1,3 +1,2 @@
-cd bin
-GrinGoldMiner3.exe
+bin\MoneroVMiner.exe
 

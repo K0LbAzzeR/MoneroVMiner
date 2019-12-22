@@ -1,4 +1,4 @@
 #!/bin/sh
 
 cd bin
-./GrinGoldMiner3
+./MoneroVMiner

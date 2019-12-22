@@ -1159,7 +1159,7 @@ __kernel   void FluffyRecovery(const u64 v0i, const u64 v1i, const u64 v2i, cons
 	const int gid = get_global_id(0);
 	const short lid = get_local_id(0);
 
-	__local u32 nonces[42];
+	__local u32 nonces[32];
 	u64 sipblock[64];
 
 	u64 v0;
@@ -1167,7 +1167,7 @@ __kernel   void FluffyRecovery(const u64 v0i, const u64 v1i, const u64 v2i, cons
 	u64 v2;
 	u64 v3;
 
-	if (lid < 42) nonces[lid] = 0;
+	if (lid < 32) nonces[lid] = 0;
 
 	barrier(CLK_LOCAL_MEM_FENCE);
 
@@ -1203,7 +1203,7 @@ __kernel   void FluffyRecovery(const u64 v0i, const u64 v1i, const u64 v2i, cons
 			u64 a = u | (v << 32);
 			u64 b = v | (u << 32);
 
-			for (int i = 0; i < 42; i++)
+			for (int i = 0; i < 32; i++)
 			{
 				bool match = (recovery[i] == a) || (recovery[i] == b);
 				if (match)
@@ -1214,7 +1214,7 @@ __kernel   void FluffyRecovery(const u64 v0i, const u64 v1i, const u64 v2i, cons
 
 	barrier(CLK_LOCAL_MEM_FENCE);
 
-	if (lid < 42)
+	if (lid < 32)
 	{
 		if (nonces[lid] > 0)
 			indexes[lid] = nonces[lid];

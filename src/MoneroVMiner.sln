@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SharedSerialization", "Shar
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrinGoldMinerAPI", "GrinProMInerAPI\GrinGoldMinerAPI.csproj", "{E7B7D98B-7378-4945-9AE6-85691CBDCF88}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "GrinGoldMiner3", "GrinGoldMiner3\GrinGoldMiner3.csproj", "{79E37C54-27B1-4000-8733-64DB721B6853}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MoneroVMiner", "MoneroVMiner\MoneroVMiner.csproj", "{79E37C54-27B1-4000-8733-64DB721B6853}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

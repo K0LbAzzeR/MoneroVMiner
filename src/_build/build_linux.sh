@@ -2,7 +2,7 @@
 
 mkdir bin
 cd ..
-cd GrinGoldMiner3
+cd MoneroVMiner
 dotnet publish -c Release -r linux-x64 --self-contained --framework netcoreapp2.2 --output ../_build/bin
 cd ..
 cd CudaSolver

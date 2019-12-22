@@ -150,7 +150,7 @@ namespace CudaSolver
             job = jobToSolve;
         }
 
-        internal void FindSolutions(ConcurrentQueue<Solution> solutions, int cyclen = 42)
+        internal void FindSolutions(ConcurrentQueue<Solution> solutions, int cyclen = 32)
         {
             try
             {
@@ -191,8 +191,8 @@ namespace CudaSolver
 
         const uint NIL = ~(uint)0;
         const uint EDGEBITS = 29;
-        private const byte MAXPROOF = 42;
-        public static uint PROOFSIZE = 42;
+        private const byte MAXPROOF = 32;
+        public static uint PROOFSIZE = 32;
 
         public struct link
         { // element of adjacency list
@@ -322,8 +322,8 @@ namespace CudaSolver
                     if (len == PROOFSIZE && nsols < MAXSOLS)
                     {
                         //qsort(sols[nsols++], PROOFSIZE, sizeof(uint), nonce_cmp);
-                        if (PROOFSIZE != 42)
-                            sols[(int)nsols] = sols[(int)nsols++].Take((int)PROOFSIZE).OrderBy(e => e).Concat(new uint[42-PROOFSIZE]).ToArray();
+                        if (PROOFSIZE != 32)
+                            sols[(int)nsols] = sols[(int)nsols++].Take((int)PROOFSIZE).OrderBy(e => e).Concat(new uint[32-PROOFSIZE]).ToArray();
                         else
                             sols[(int)nsols] = sols[(int)nsols++].OrderBy(e => e).ToArray();
                         //memcpy(sols[nsols], sols[nsols - 1], sizeof(sols[0]));
@@ -380,7 +380,7 @@ namespace CudaSolver
 
         internal void SetProof(CuckooType type)
         {
-            graph.PROOFSIZE = (type == CuckooType.GRIN29) ? 42u : 32u;
+            graph.PROOFSIZE = 32u;
         }
     };
 

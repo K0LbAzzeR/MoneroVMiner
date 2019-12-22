@@ -30,7 +30,7 @@ namespace CudaSolver
 
         const long INDEX_SIZE = 4096 * 8;
 
-        const int EDGE_CNT = 1 << 29;
+        const int EDGE_CNT = 1 << 27;
         const int EDGE_SEG = EDGE_CNT / 4;
 
         static DeviceFamily d_Family = DeviceFamily.Other;
@@ -368,12 +368,12 @@ namespace CudaSolver
                         d_indexesB.MemsetAsync(0, streamPrimary.Stream);
                         meanRecover.RunAsync(streamPrimary.Stream, s.job.k0, s.job.k1, s.job.k2, s.job.k3, d_indexesB.DevicePointer);
                         streamPrimary.Synchronize();
-                        s.nonces = new uint[42];
-                        d_indexesB.CopyToHost(s.nonces, 0, 0, 42 * 4);
+                        s.nonces = new uint[32];
+                        d_indexesB.CopyToHost(s.nonces, 0, 0, 32 * 4);
                         s.nonces = s.nonces.OrderBy(n => n).ToArray();
-                        //fidelity = (42-cycles_found / graphs_searched) * 42
+                        //fidelity = (32-cycles_found / graphs_searched) * 32
                         solutions++;
-                        s.fidelity = ((double)solutions / (double)trims) * 42.0;
+                        s.fidelity = ((double)solutions / (double)trims) * 32.0;
                         //Console.WriteLine(s.fidelity.ToString("0.000"));
                         if (Comms.IsConnected())
                         {
