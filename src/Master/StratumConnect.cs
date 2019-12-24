@@ -296,6 +296,9 @@ namespace Mozkomor.GrinGoldMiner
                                         }
                                         else if (ConnectionManager.IsConnectionCurrent(id))
                                             PushJobToWorkers();
+                                        Console.ForegroundColor = ConsoleColor.Green;
+                                        Logger.Log(LogLevel.INFO, $"({ConnectionManager.solutionCounter}) New Job: sc id {id}, job {CurrentJob.jobID}, dificulty {CurrentJob.difficulty}, height {CurrentJob.height}");
+                                        Console.ResetColor();
                                     }
                                 }
                                 break;
@@ -366,6 +369,14 @@ namespace Mozkomor.GrinGoldMiner
                                         }
                                     }
                                     catch { }
+                                }
+                                break;
+                            case "message":
+                                if (msg.ContainsKey("result"))
+                                {
+                                    Console.ForegroundColor = ConsoleColor.Yellow;
+                                    Logger.Log(LogLevel.INFO, $"(sc id {id}):{msg["result"].ToString()}");
+                                    Console.ResetColor();
                                 }
                                 break;
                             case "login":

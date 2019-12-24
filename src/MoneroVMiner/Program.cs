@@ -86,7 +86,7 @@ namespace GrinGoldMiner3
             while (!IsTerminated)
             {
                 Task.Delay(1000).Wait();
-                if (counter++ % 20 == 0)
+                if (counter++ % 120 == 0)
                     WorkerManager.PrintWorkerInfo();
             }
 
