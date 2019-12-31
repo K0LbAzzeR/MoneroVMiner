@@ -30,7 +30,7 @@ namespace CudaSolver
 
         const long INDEX_SIZE = 4096 * 8;
 
-        const int EDGE_CNT = 1 << 27;
+        const int EDGE_CNT = 1 << 29;
         const int EDGE_SEG = EDGE_CNT / 4;
 
         static DeviceFamily d_Family = DeviceFamily.Other;
